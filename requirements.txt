@@ -3,4 +3,4 @@ scipy
 pandas
 matplotlib
 cmasher
-skimage
+scikit-image
