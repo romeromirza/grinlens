@@ -1,0 +1,6 @@
+numpy 
+scipy
+pandas
+matplotlib
+cmasher
+scikit-image
