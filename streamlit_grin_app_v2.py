@@ -26,7 +26,7 @@ except Exception as e:
 
 # --- Ensure resource CSVs exist where grin.py expects ---
 def ensure_resources():
-    here = os.path.abspath(os.getcwd())
+    here = "./"
     os.makedirs(os.path.join(here, "beams"), exist_ok=True)
     os.makedirs(os.path.join(here, "d2t"), exist_ok=True)
 
