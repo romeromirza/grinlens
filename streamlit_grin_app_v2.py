@@ -4,7 +4,9 @@ import os
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
+import sys
 
+sys.path.append("./")
 # Colormaps
 try:
     import cmasher as cmr
