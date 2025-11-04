@@ -4,3 +4,4 @@ pandas
 matplotlib
 cmasher
 scikit-image
+tqdm
