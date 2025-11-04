@@ -3,8 +3,4 @@ scipy
 pandas
 matplotlib
 cmasher
-<<<<<<< HEAD
-scikit-image
-=======
-scikit-image
->>>>>>> 867b1bdbf4b28ef738c71a38592d01c335736d65
+skimage
