@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.interpolate import interp1d
+from stl import mesh 
 
 def predict_m_at_n(n_known, nm, n_new, *, kind='linear', extrapolate=True):
     """
@@ -66,3 +67,29 @@ def get_vf(eps_emt, eps_mat):
     vf[vf<0] = 0
     vf[vf>1] = 1.0
     return vf
+
+def sphere_mesh(radius=10.0, n_lat=64, n_lon=64):
+    phi = np.linspace(0, np.pi, n_lat)
+    theta = np.linspace(0, 2*np.pi, n_lon, endpoint=False)
+    phi, theta = np.meshgrid(phi, theta, indexing='ij')
+    x = radius*np.sin(phi)*np.cos(theta)
+    y = radius*np.sin(phi)*np.sin(theta)
+    z = radius*np.cos(phi)
+
+    # build triangles on the grid
+    tris = []
+    for i in range(n_lat-1):
+        for j in range(n_lon):
+            jp = (j+1) % n_lon
+            v00 = np.array([x[i, j],   y[i, j],   z[i, j]])
+            v01 = np.array([x[i, jp],  y[i, jp],  z[i, jp]])
+            v10 = np.array([x[i+1,j],  y[i+1,j],  z[i+1,j]])
+            v11 = np.array([x[i+1,jp], y[i+1,jp], z[i+1,jp]])
+            tris.append([v00, v10, v01])
+            tris.append([v01, v10, v11])
+    data = np.zeros(len(tris), dtype=mesh.Mesh.dtype)
+    m = mesh.Mesh(data, remove_empty_areas=False)
+    for k, t in enumerate(tris):
+        m.vectors[k] = t
+    
+    return m

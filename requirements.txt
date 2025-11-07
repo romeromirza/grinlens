@@ -5,3 +5,4 @@ matplotlib
 cmasher
 scikit-image
 tqdm
+numpy-stl

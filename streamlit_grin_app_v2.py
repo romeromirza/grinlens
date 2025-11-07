@@ -5,6 +5,7 @@ import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import sys
+from stl import mesh
 
 sys.path.append("./")
 # Colormaps
@@ -156,7 +157,7 @@ if build:
         else:  # custom_grid
             if uploaded is None:
                 st.error("Upload a 4-column file first."); st.stop()
-            import numpy as _np
+            
             try:
                 data = _np.loadtxt(uploaded)
             except Exception as e:
@@ -270,7 +271,7 @@ if "grin_result" in st.session_state:
 
     st.subheader("Export thickness grid")
     out_name = st.text_input("File name", value="thickness_grid.txt")
-    if st.button("Write file"):
+    if st.button("Make thickness file"):
         try:
             ln = st.session_state.get("writer", None)
             if ln is None:
@@ -281,6 +282,25 @@ if "grin_result" in st.session_state:
                 with open(tmp_path, "rb") as f:
                     data = f.read()
                 st.download_button("Download thickness grid", data=data, file_name=os.path.basename(out_name), mime="text/plain")
+                st.info("File generated. Use the button above to download.")
+        except Exception as e:
+            st.error(f"Write failed: {e}")
+
+    st.subheader("Export mesh STL (sphere and cylinder only)")
+    mesh_name = st.text_input("Output mesh name", value="mesh")
+    if st.button("Make mesh STL"):
+        try:
+            ln = st.session_state.get("writer", None)
+            if ln is None:
+                st.error("No lens object available for writing. Rebuild first.")
+            else:
+                tmp_path = mesh_name if os.path.isabs(mesh_name) else os.path.join(os.getcwd(), mesh_name)
+                ln.make_mesh()
+                mesh_stl = ln.mesh
+                mesh_stl.save(tmp_path+'.stl')
+                with open(tmp_path+'.stl', "rb") as f:
+                    data = f.read()
+                st.download_button("Download mesh", data=data, file_name=os.path.basename(mesh_name)+'.stl')
                 st.info("File generated. Use the button above to download.")
         except Exception as e:
             st.error(f"Write failed: {e}")

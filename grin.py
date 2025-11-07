@@ -158,7 +158,7 @@ class lens():
     def write_thickness(self, file_name, origin=None):
 
         if origin == None:
-            origin = (self.__X//2, self.__Y//2, self.__Z//2)
+            origin = (-self.__X/2, -self.__Y/2, -self.__Z/2)
         with open(file_name, 'w') as f:
             
             f.write("origin \n")
@@ -174,6 +174,11 @@ class lens():
                         thickness = self.thickness_grid[x,y,z]
                         f.write("{:.3f} ".format(thickness))
                     f.write("\n")
+
+    def make_mesh(self):
+        if self.shape.lower() == 'luneburg_sphere':
+            self.mesh = utils.sphere_mesh(radius=self.__R,
+                              n_lat=128, n_lon=128)
 
     def __make_gyroid_cell(self):
         """
