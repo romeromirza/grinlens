@@ -7,11 +7,12 @@ import matplotlib.pyplot as plt
 import sys
 import trimesh
 
+
 sys.path.append("./")
 # Colormaps
 try:
     import cmasher as cmr
-    CMAP_EPS = cmr.freeze
+    CMAP_EPS = cmr.amethyst
     CMAP_T   = cmr.ember
     CMAP_LAT = cmr.neutral
 except Exception:
@@ -62,13 +63,14 @@ ensure_resources()
 
 st.set_page_config(page_title="GRIN Lens Lattice Designer", layout="wide")
 st.title("GRIN Lens Lattice Designer")
-st.caption("Build Luneburg spheres and cylinders, use a custom permittivity function, or import a permittivity point cloud.")
+st.caption("Build Luneburg spheres and cylinders, use a custom permittivity function, or import a permittivity point cloud. Scroll down to export thickness grid and STL mesh.")
+st.caption("Scroll down to export thickness grid and STL mesh.")
 
 
 # --- Add logo on top right ---
 logo_path = "./inkbitlogo.png"  # replace with your actual file path or URL
 # Streamlit columns for layout
-col1, col2 = st.columns([9, 1])
+col1, col2 = st.columns([8, 2])
 with col2:
     st.image(logo_path, use_container_width=True)
 
@@ -226,7 +228,7 @@ if "grin_result" in st.session_state:
     if not isinstance(stepz, (int, float)) or stepz <= 0:
         stepz = total_depth_mm / max(depth_eps, 1)
 
-    z_idx = st.slider("z-index (0..Nz-1)", 0, depth_eps - 1, depth_eps // 2, step=1, key="z_idx_shared")
+    z_idx = st.slider("Slice in z-direction", 0, depth_eps - 1, depth_eps // 2, step=1, key="z_idx_shared")
 
     z_norm_center = (z_idx + 0.5) / max(depth_eps, 1)
     z_pos_mm_center = z_norm_center * total_depth_mm
