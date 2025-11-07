@@ -6,7 +6,8 @@ from scipy.interpolate import interp1d, RegularGridInterpolator
 from skimage.transform import resize
 
 class lens():
-    def __init__(self, lattice="gyroid", eps_mat = 2.35, cell_size = 5.0, grid_size = 64, min_thickness = 0.1):
+    def __init__(self, lattice="gyroid", eps_mat = 2.35, cell_size = 5.0, grid_size = 64, min_thickness = 0.1,
+                 edge_mode='clip'):
         
         """
         Class for graded-index (GRIN) structures.
@@ -38,11 +39,15 @@ class lens():
             raise NotImplementedError(f"Selected lattice [{lattice}] is not implemented.")
         if cell_size<1.0 or cell_size>8.0:
             raise ValueError("cell_size must be between 1-8 mm")
+        if edge_mode not in ['clip', 'extend']:
+            raise ValueError("Edge mode should be clip or extend.")
 
         # Each cell is divided into grid_size elements
         self.__grid_size = grid_size + 1 # + 1 since these are edges
         self.__lattice = lattice.lower() 
         self.__cell_size = cell_size # in mm
+
+        self.edge_mode = edge_mode
 
         self.unit_grid = np.ones((self.__grid_size, 
                                     self.__grid_size, 
@@ -83,7 +88,10 @@ class lens():
 
         self.thickness_grid = f_d2t(self.density_grid)
         # self.thickness_grid[(self.thickness_grid>0)*(self.thickness_grid<self.min_thickness)] = self.min_thickness
-        self.thickness_grid[(self.thickness_grid<self.min_thickness)] = 0.0
+        if self.edge_mode == 'extend':
+            self.thickness_grid[(self.thickness_grid<self.min_thickness)*(self.thickness_grid>0)] = self.min_thickness
+        else:
+            self.thickness_grid[(self.thickness_grid<self.min_thickness)] = 0.0
     
     def make(self, shape="luneburg_sphere", 
              out_shape=(101, 101, 101), R=60.0, X=60.0, Y=60.0, Z=0.0, 

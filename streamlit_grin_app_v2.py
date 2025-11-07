@@ -261,7 +261,6 @@ if "grin_result" in st.session_state:
         st.markdown("**Lattice**")
         fig = plt.figure()
         im = plt.imshow(lat_slice.T, origin="lower", cmap=CMAP_LAT, aspect="equal", vmin=lat_min, vmax=lat_max)
-        plt.colorbar(im, fraction=0.046, pad=0.04)
         plt.xticks([]); plt.yticks([])
         st.pyplot(fig, clear_figure=True, width='stretch')
 
