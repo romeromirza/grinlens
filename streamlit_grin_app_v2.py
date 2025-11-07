@@ -131,16 +131,17 @@ def _nearest_index(val, arr):
 
 if build:
     try:
-        ln = grin.lens(lattice=lattice, eps_mat=float(eps_mat), cell_size=float(cell_size), grid_size=internal_grid, min_thickness=float(min_th))
+        ln = grin.lens(lattice=lattice, eps_mat=float(eps_mat), cell_size=float(cell_size), grid_size=internal_grid,
+                        min_thickness=float(min_th), edge_mode=edge_mode)
 
         if shape == "luneburg_sphere":
             X = Y = Z = float(2.0 * R)
-            ln.make(shape=shape, out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z, edge_mode=edge_mode)
+            ln.make(shape=shape, out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z)
 
         elif shape == "luneburg_cylinder":
             X = Y = float(2.0 * R)
             Z = float(Z_user if Z_user is not None else 2.0 * R)
-            ln.make(shape=shape, out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z, edge_mode=edge_mode)
+            ln.make(shape=shape, out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z)
 
         elif shape == "custom_function":
             X = float(X_user); Y = float(Y_user); Z = float(Z_user)
@@ -150,7 +151,7 @@ if build:
             }
             def eps_func(x, y, z):
                 return eval(custom_expr, {"__builtins__": {}}, dict(safe_ns, x=x, y=y, z=z))
-            ln.make(shape="custom_grid", out_shape=(int(nx), int(ny), int(nz)), X=X, Y=Y, Z=Z, custom_eps_func=eps_func, edge_mode=edge_mode)
+            ln.make(shape="custom_grid", out_shape=(int(nx), int(ny), int(nz)), X=X, Y=Y, Z=Z, custom_eps_func=eps_func)
 
         else:  # custom_grid
             if uploaded is None:
@@ -191,7 +192,7 @@ if build:
             if X <= 0 or Y <= 0 or Z <= 0:
                 st.error("Physical dimensions X,Y,Z must be > 0."); st.stop()
 
-            ln.make(shape="custom_grid", out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z, custom_eps_grid=eps_3d, edge_mode=edge_mode)
+            ln.make(shape="custom_grid", out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z, custom_eps_grid=eps_3d)
 
         st.session_state["grin_result"] = {
             "eps_grid": ln.eps_grid,
