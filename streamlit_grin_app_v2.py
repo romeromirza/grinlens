@@ -78,6 +78,7 @@ with st.sidebar:
     eps_mat = st.number_input("Material εᵣ", min_value=1.01, max_value=20.0, value=2.35, step=0.01, format="%.2f")
     cell_size = st.number_input("Unit cell size [mm]", min_value=1.0, max_value=8.0, value=5.0, step=0.1, format="%.1f")
     min_th = st.number_input("Minimum beam thickness [mm]", min_value=0.0, max_value=5.0, value=0.1, step=0.05, format="%.2f")
+    edge_mode = st.selectbox("Edge mode (Clip: lens will be truncated at min. thickness).", ["clip", "extend"], index=0)
 
     st.divider()
     st.subheader("Output grid shape")
@@ -134,12 +135,12 @@ if build:
 
         if shape == "luneburg_sphere":
             X = Y = Z = float(2.0 * R)
-            ln.make(shape=shape, out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z)
+            ln.make(shape=shape, out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z, edge_mode=edge_mode)
 
         elif shape == "luneburg_cylinder":
             X = Y = float(2.0 * R)
             Z = float(Z_user if Z_user is not None else 2.0 * R)
-            ln.make(shape=shape, out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z)
+            ln.make(shape=shape, out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z, edge_mode=edge_mode)
 
         elif shape == "custom_function":
             X = float(X_user); Y = float(Y_user); Z = float(Z_user)
@@ -149,7 +150,7 @@ if build:
             }
             def eps_func(x, y, z):
                 return eval(custom_expr, {"__builtins__": {}}, dict(safe_ns, x=x, y=y, z=z))
-            ln.make(shape="custom_grid", out_shape=(int(nx), int(ny), int(nz)), X=X, Y=Y, Z=Z, custom_eps_func=eps_func)
+            ln.make(shape="custom_grid", out_shape=(int(nx), int(ny), int(nz)), X=X, Y=Y, Z=Z, custom_eps_func=eps_func, edge_mode=edge_mode)
 
         else:  # custom_grid
             if uploaded is None:
@@ -190,7 +191,7 @@ if build:
             if X <= 0 or Y <= 0 or Z <= 0:
                 st.error("Physical dimensions X,Y,Z must be > 0."); st.stop()
 
-            ln.make(shape="custom_grid", out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z, custom_eps_grid=eps_3d)
+            ln.make(shape="custom_grid", out_shape=(int(nx), int(ny), int(nz)), R=float(R), X=X, Y=Y, Z=Z, custom_eps_grid=eps_3d, edge_mode=edge_mode)
 
         st.session_state["grin_result"] = {
             "eps_grid": ln.eps_grid,
