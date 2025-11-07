@@ -5,7 +5,7 @@ import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import sys
-from stl import mesh
+import trimesh
 
 sys.path.append("./")
 # Colormaps
@@ -297,7 +297,7 @@ if "grin_result" in st.session_state:
                 tmp_path = mesh_name if os.path.isabs(mesh_name) else os.path.join(os.getcwd(), mesh_name)
                 ln.make_mesh()
                 mesh_stl = ln.mesh
-                mesh_stl.save(tmp_path+'.stl')
+                mesh_stl.export(tmp_path+'.stl')
                 with open(tmp_path+'.stl', "rb") as f:
                     data = f.read()
                 st.download_button("Download mesh", data=data, file_name=os.path.basename(mesh_name)+'.stl')

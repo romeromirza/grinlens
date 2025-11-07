@@ -177,8 +177,11 @@ class lens():
 
     def make_mesh(self):
         if self.shape.lower() == 'luneburg_sphere':
-            self.mesh = utils.sphere_mesh(radius=self.__R,
-                              n_lat=128, n_lon=128)
+            self.mesh = utils.sphere_mesh(radius=self.__R)
+        elif self.shape.lower() == 'luneburg_cylinder':
+            self.mesh = utils.cylinder_mesh(radius=self.__R, height=self.__Z)
+        else:
+            self.mesh = None
 
     def __make_gyroid_cell(self):
         """
