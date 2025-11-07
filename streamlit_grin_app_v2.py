@@ -78,7 +78,7 @@ with col2:
 with st.sidebar:
     st.header("Inputs")
     lattice = st.selectbox("Lattice", ["gyroid", "diamond", "octet", "fluorite"], index=0)
-    eps_mat = st.number_input("Material εᵣ", min_value=1.01, max_value=20.0, value=2.35, step=0.01, format="%.2f")
+    eps_mat = st.number_input("Material εᵣ (2.4 for Inkbit COT)", min_value=1.01, max_value=10.0, value=2.40, step=0.01, format="%.2f")
     cell_size = st.number_input("Unit cell size [mm]", min_value=1.0, max_value=8.0, value=5.0, step=0.1, format="%.1f")
     min_th = st.number_input("Minimum beam thickness [mm]", min_value=0.0, max_value=5.0, value=0.1, step=0.05, format="%.2f")
     edge_mode = st.selectbox("Edge mode (Clip: lens will be truncated at min. thickness).", ["clip", "extend"], index=0)
