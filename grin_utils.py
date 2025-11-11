@@ -1,6 +1,5 @@
 import numpy as np
 from scipy.interpolate import interp1d
-from stl import mesh 
 import trimesh
 
 def predict_m_at_n(n_known, nm, n_new, *, kind='linear', extrapolate=True):
