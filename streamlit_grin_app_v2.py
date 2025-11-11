@@ -84,7 +84,7 @@ with st.sidebar:
     edge_mode = st.selectbox("Edge mode (Clip: lens will be truncated at min. thickness).", ["clip", "extend"], index=0)
 
     st.divider()
-    st.subheader("Output grid shape")
+    st.subheader("Output grid shape ")
     nx = st.number_input("Nx", min_value=3, max_value=401, value=101, step=2)
     ny = st.number_input("Ny", min_value=3, max_value=401, value=101, step=2)
     nz = st.number_input("Nz", min_value=3, max_value=401, value=101, step=2)
