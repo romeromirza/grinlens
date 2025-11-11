@@ -6,3 +6,5 @@ cmasher
 scikit-image
 tqdm
 trimesh
+streamlit
+sys
