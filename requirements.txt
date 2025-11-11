@@ -7,4 +7,3 @@ scikit-image
 tqdm
 trimesh
 streamlit
-sys
